@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   margin: 0;
   padding: 0;
@@ -15,10 +19,16 @@
 }
 
 :root {
-  --bg-color: #261893;
-  --border-color: #3e2fae;
-  --accent-color-light: #d3e398;
-  --accent-color: #DBFF5E;
+  --bg-color: #fff;
+  --border-color: #ebebeb;
+  --accent-color-light: #555;
+  --accent-color: #000;
+  --text-color: #111;
+}
+
+body {
+  font-family: 'Rubik', sans-serif;
+  color: var(--text-color);
 }
 
 
@@ -29,7 +39,6 @@
   grid-template-columns: repeat(auto-fill, minmax(15vw, 1fr));
   grid-template-rows: repeat(auto-fill, minmax(15vh, 1fr));
   background-color: var(--bg-color);
-  padding: 1px;
 }
 
 #main .grid-item {
@@ -55,10 +64,17 @@
   width: 100px;
   transform: translate(0);
   position: absolute;
-  animation: rotate 4s linear forwards infinite;
   z-index: 0;
   top: 50%;
   transform-origin: top center;
+}
+
+#main .grid-item:nth-child(even)::before {
+  animation: rotate 8s linear forwards infinite;
+}
+
+#main .grid-item:nth-child(odd)::before {
+  animation: rotate 5s linear reverse infinite;
 }
 
 #main .grid-item.animated-border::after {
@@ -79,7 +95,7 @@
   position: relative;
   height: 100%;
   z-index: 1;
-  margin: 2px;
+  margin: 1px;
   background-color: var(--bg-color);
 }
 
