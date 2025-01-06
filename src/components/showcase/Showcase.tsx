@@ -6,7 +6,6 @@ const Showcase = () => {
       <p className="text-md font-light uppercase tracking-wide">Now building...</p>
       <h3 className="text-5xl font-semibold uppercase tracking-wide mb-3">Onimode</h3>
       <div className="flex aspect-video w-full">
-        <img src={imageSrc} alt="Showcase image" className="object-cover w-full rounded-xl max-h-[20rem]" />
       </div>
     </div>
   )
