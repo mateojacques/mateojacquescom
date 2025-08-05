@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactNode } from "react";
+import { MouseEventHandler, ReactElement, useState } from "react";
 import { Button } from "../ui/button";
 import { ExternalLink } from "lucide-react";
 import {
@@ -7,14 +7,20 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import React from "react";
 
 interface IGridItem {
-  component: ReactNode;
+  component: ReactElement;
   classes?: string;
   type?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   href?: string;
   tooltip?: string;
+  childComponent?: ReactElement;
+}
+
+interface IGridButton extends IGridItem {
+  setIsFullscreen: (isFullscreen: boolean) => void;
 }
 
 const ExternalLinkButton = ({ href }: { href: string }) => (
@@ -24,19 +30,27 @@ const ExternalLinkButton = ({ href }: { href: string }) => (
       className="absolute right-[10px] top-[10px]"
       size="icon"
     >
-      <ExternalLink style={{ width: "1.5rem", height: "1.5rem" }} />
+      <ExternalLink className="w-[1rem] h-[1rem] lg:w-[1.5rem] lg:h-[1.5rem]" />
     </Button>
   </a>
 );
 
-const GridButton = ({ component, onClick, tooltip }: IGridItem) => (
+const GridButton = ({
+  component,
+  onClick,
+  tooltip,
+  setIsFullscreen,
+}: IGridButton) => (
   <TooltipProvider>
     <Tooltip>
       <TooltipTrigger className="w-full h-full">
         <Button
           className="w-full h-full gap-0"
           variant="ghost"
-          onClick={onClick}
+          onClick={(e) => {
+            setIsFullscreen(true);
+            if (onClick) onClick(e);
+          }}
         >
           {component}
         </Button>
@@ -47,15 +61,22 @@ const GridButton = ({ component, onClick, tooltip }: IGridItem) => (
 );
 
 const GridItem = (props: IGridItem) => {
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const gridComponents: { [key: string]: any } = {
-    button: <GridButton {...props} />,
+    button: <GridButton {...props} {...{ setIsFullscreen }} />,
     default: props.component,
   };
 
   return (
-    <div className={`${`grid-item ${props.classes || ""}`.trim()}`}>
+    <div
+      className={`${`grid-item ${isFullscreen ? "fullscreen-item" : ""} ${
+        props.classes || ""
+      }`.trim()}`}
+    >
       <div className="content">
-        {gridComponents[props.type || "default"]}
+        {isFullscreen && props.childComponent
+          ? React.cloneElement(props.childComponent, { setIsFullscreen })
+          : gridComponents[props.type || "default"]}
         {props.href && <ExternalLinkButton href={props.href} />}
       </div>
     </div>

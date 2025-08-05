@@ -27,10 +27,9 @@
 }
 
 body {
-  font-family: 'Rubik', sans-serif;
+  font-family: "Rubik", sans-serif;
   color: var(--text-color);
 }
-
 
 #main {
   width: 100vw;
@@ -49,6 +48,27 @@ body {
   justify-content: center;
   border: 1px solid var(--border-color);
   padding: 1px;
+  transition: all 0.5s ease;
+}
+
+#main:has(.fullscreen-item),
+#main:has(.fullscreen-item) .grid-item.fullscreen-item {
+  width: 100svw;
+  height: 100svh;
+  overflow: hidden;
+}
+
+#main:has(.fullscreen-item) .grid-item:not(.fullscreen-item) {
+  opacity: 0;
+}
+
+#main:has(.fullscreen-item) .grid-item.fullscreen-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 5rem;
+  border-width: 0px;
 }
 
 #main .grid-item.animated-border::before {
@@ -82,7 +102,8 @@ body {
   position: absolute;
   inset: 0;
   mask: linear-gradient(black, black) content-box, linear-gradient(black, black);
-  -webkit-mask: linear-gradient(black, black) content-box, linear-gradient(black, black);
+  -webkit-mask: linear-gradient(black, black) content-box,
+    linear-gradient(black, black);
   mask-composite: exclude;
   -webkit-mask-composite: destination-out;
   background: var(--bg-color);
@@ -180,5 +201,12 @@ body #main .bl-0 {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #main {
+    grid-template-columns: repeat(6, 16.666svw);
+    grid-template-rows: repeat(14, 33svw);
   }
 }
